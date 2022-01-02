@@ -1,18 +1,32 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    ini adalah halaman home
+
+    <v-icon color="danger"> mdi-users </v-icon>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
 export default {
-  name: 'Home',
-  components: {
-    HelloWorld
-  }
-}
+  data() {
+    return {
+      data: {},
+    };
+  },
+  mounted() {
+    this.getData();
+  },
+  methods: {
+    getData() {
+      this.$axios
+        .get("user")
+        .then((r) => {
+          this.data = r;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+  },
+};
 </script>

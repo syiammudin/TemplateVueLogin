@@ -1,44 +1,46 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../views/Home.vue";
+import Login from "../views/Login.vue";
+import About from "../views/About.vue";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: "/",
+    name: "Home",
+    components: {
+      default: Home,
+      title: {
+        template: `<span>Home</span>`,
+      },
+    },
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: "/about",
+    name: "about",
+    components: {
+      default: About,
+      title: {
+        template: `<span>Home</span>`,
+      },
+    },
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: () => import(/* webpackChunkName: "login" */ '../views/login.vue')
-  }
-]
+    path: "/login",
+    name: "Login",
+    component: Login,
+    meta: {
+      layout: "login",
+    },
+  },
+];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
-})
+  routes,
+});
 
-router.beforeEach((to, from, next) => {
-  const loggedIn = localStorage.getItem('user')
-
-  if (to.matched.some(record => record.meta.auth) && !loggedIn) {
-    next('/login')
-    return
-  }
-  next()
-})
-
-export default router
+export default router;
