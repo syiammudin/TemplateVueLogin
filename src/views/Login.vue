@@ -20,7 +20,7 @@
               >
                 <v-text-field
                   class="mb-6"
-                  v-model="email"
+                  v-model="form.email"
                   :rules="rules.email"
                   label="Email"
                   placeholder="your@email.com"
@@ -32,7 +32,7 @@
 
                 <v-text-field
                   class="mb-6"
-                  v-model="password"
+                  v-model="form.password"
                   :rules="rules.password"
                   label="Password"
                   placeholder="Your Password"
@@ -74,8 +74,7 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      email: "",
-      password: "",
+      form: {},
       rules: [],
       showPassword: false,
       loading: false,
@@ -89,17 +88,33 @@ export default {
   },
   methods: {
     login() {
-      this.$store
-        .dispatch("login", {
-          email: this.email,
-          password: this.password,
+      this.loading = true;
+      this.$axios
+        .post("/login", this.form)
+        .then((r) => {
+          this.$store.dispatch("userLogged", r.data);
+          this.$axios.defaults.headers[
+            "Authorization"
+          ] = `Bearer ${r.data.token}`;
+          this.$router.push("/");
         })
-        .then(() => {
-          this.$router.push({ name: "About" });
+        .catch((e) => {
+          if (e.response) {
+            if (e.response.status == 422) {
+              this.rules = e.response.data.errors;
+              this.$refs.form.validate();
+            }
+
+            this.$dialog.message.error(e.response.data.message, {
+              position: "bottom-center",
+            });
+          } else {
+            this.$dialog.message.error(JSON.stringify(e), {
+              position: "bottom-center",
+            });
+          }
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .finally(() => (this.loading = false));
     },
   },
 };
