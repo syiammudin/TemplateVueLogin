@@ -25,10 +25,9 @@ export default new Vuex.Store({
       state.user = data.user;
       window.localStorage.setItem("user", JSON.stringify(data.user));
 
-      if (state.token) {
-        state.token = data.token;
-        window.localStorage.setItem("token", data.token);
-      }
+      state.token = data.token;
+      window.localStorage.setItem("token", data.token);
+
     },
 
     LOGOUT(state) {

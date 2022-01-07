@@ -6,6 +6,11 @@ import store, { token, url } from "./store";
 import axios from "axios";
 import vuetify from '@/plugins/vuetify'
 import '@mdi/font/css/materialdesignicons.css'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
+Vue.use(ElementUI);
+
 
 const $axios = axios.create({
   baseURL: `${url}`,

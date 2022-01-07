@@ -114,7 +114,17 @@ export default {
   },
   methods: {
     logout() {
-      this.$store.dispatch("logout");
+      this.$axios
+        .post("/api/logout")
+        .then(() => {
+          this.$axios.defaults.headers["Authorization"] = null;
+          this.$store.dispatch("logout");
+        })
+        .catch((e) => {
+          // nothing todo
+          console.log(e);
+        })
+        .finally(() => this.$router.push("/login"));
     },
   },
 };
